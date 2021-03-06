@@ -6,7 +6,14 @@
         xmlns:local="clr-namespace:TaskHandling"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+	<StackPanel>
+		<Button Margin="5" Width="350" Content="ThrowException" Command="{Binding CommandThrowException}"/>
+		<Button Margin="5" Width="350" Content="SomeCompletionWorkAsync" Command="{Binding CommandSomeCompletionWorkAsync}"/>
+		<Button Margin="5" Width="350" Content="ThrowOperationCanceledExceptionAsync" Command="{Binding CommandThrowOperationCanceledExceptionAsync}"/>
+		<Button Margin="5" Width="350" Content="ThrowTaskCanceledExceptionAsync" Command="{Binding CommandThrowTaskCanceledExceptionAsync}"/>
+		<Button Margin="5" Width="350" Content="ThrowStackOverflowExceptionAsync" Command="{Binding CommandThrowStackOverflowExceptionAsync}"/>
+		<Button Margin="5" Width="350" Content="ThrowCustomExceptionAsync" Command="{Binding CommandThrowCustomExceptionAsync}"/>
+		<Button Margin="5" Width="350" Content="ThrowCustomExceptionWithResultAsync" Command="{Binding CommandThrowCustomExceptionWithResultAsync}"/>
+		<TextBlock Margin="5" Text="{Binding Result}"/>
+	</StackPanel>
 </Window>
