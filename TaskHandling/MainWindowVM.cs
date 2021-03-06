@@ -43,39 +43,39 @@ namespace TaskHandling
 
 		private async Task ThrowExceptionAsync()
 		{
-			await someServiceWithExceptions.ThrowException().HandleExceptionsWithShowingMessage();
+			await someServiceWithExceptions.ThrowException().HandleTask(() => { });
 			Result = ToJson(rnd.Next());
 		}
 
 		private async Task SomeCompletionWorkAsync()
 		{
-			await someServiceWithExceptions.SomeCompletionWorkAsync().HandleExceptionsWithShowingMessage();
+			await someServiceWithExceptions.SomeCompletionWorkAsync().HandleTask();
 			Result = ToJson(rnd.Next());
 		}
 
 		private async Task ThrowOperationCanceledExceptionAsync()
 		{
-			Result = ToJson(await someServiceWithExceptions.ThrowOperationCanceledExceptionAsync().HandleExceptionsWithShowingMessage());
+			Result = ToJson(await someServiceWithExceptions.ThrowOperationCanceledExceptionAsync().OnCancel(() => 0));
 		}
 
 		private async Task ThrowTaskCanceledExceptionAsync()
 		{
-			Result = ToJson(await someServiceWithExceptions.ThrowTaskCanceledExceptionAsync().HandleExceptionsWithShowingMessage());
+			Result = ToJson(await someServiceWithExceptions.ThrowTaskCanceledExceptionAsync().OnFault(e => e.Length).OnCancel(() => 0));
 		}
 
 		private async Task ThrowStackOverflowExceptionAsync()
 		{
-			Result = ToJson(await someServiceWithExceptions.ThrowStackOverflowExceptionAsync().HandleExceptionsWithShowingMessage());
+			Result = ToJson(await someServiceWithExceptions.ThrowStackOverflowExceptionAsync().HandleFault());
 		}
 
 		private async Task ThrowCustomExceptionAsync()
 		{
-			Result = ToJson(await someServiceWithExceptions.ThrowCustomExceptionAsync().HandleExceptionsWithShowingMessage());
+			Result = ToJson(await someServiceWithExceptions.ThrowCustomExceptionAsync().HandleFault());
 		}
 
 		private async Task ThrowCustomExceptionWithResultAsync()
 		{
-			Result = ToJson(await someServiceWithExceptions.ThrowCustomExceptionWithResultAsync().HandleExceptionsWithShowingMessage());
+			Result = ToJson(await someServiceWithExceptions.ThrowCustomExceptionWithResultAsync().HandleFault());
 			
 		}
 

@@ -23,6 +23,7 @@ namespace TaskHandling
 
 		public async Task<int> ThrowTaskCanceledExceptionAsync()
 		{
+			await Task.Delay(500);
 			throw new TaskCanceledException(nameof(TaskCanceledException));
 		}
 
