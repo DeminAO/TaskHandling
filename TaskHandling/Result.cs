@@ -11,6 +11,11 @@ namespace TaskHandling
 		{
 			return new Result<T> { Succeed = false };
 		}
+		
+		public static Result<T> Failure(Exception e)
+		{
+			return new Result<T> { Succeed = false };
+		}
 
 		internal static Result<T> Success(T result)
 		{

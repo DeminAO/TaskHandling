@@ -43,13 +43,12 @@ namespace TaskHandling
 
 		private async Task ThrowExceptionAsync()
 		{
-			await someServiceWithExceptions.ThrowException().HandleTask(() => { });
-			Result = ToJson(rnd.Next());
+			await someServiceWithExceptions.ThrowException().OnFault<Exception>(e => Result = ToJson(e));
 		}
 
 		private async Task SomeCompletionWorkAsync()
 		{
-			await someServiceWithExceptions.SomeCompletionWorkAsync().HandleTask();
+			await someServiceWithExceptions.SomeCompletionWorkAsync();
 			Result = ToJson(rnd.Next());
 		}
 
@@ -60,23 +59,27 @@ namespace TaskHandling
 
 		private async Task ThrowTaskCanceledExceptionAsync()
 		{
-			Result = ToJson(await someServiceWithExceptions.ThrowTaskCanceledExceptionAsync().OnFault(e => e.Length).OnCancel(() => 0));
+			Result = ToJson(await someServiceWithExceptions.ThrowTaskCanceledExceptionAsync().OnCancel(() => 0));
 		}
 
 		private async Task ThrowStackOverflowExceptionAsync()
 		{
-			Result = ToJson(await someServiceWithExceptions.ThrowStackOverflowExceptionAsync().HandleFault());
+			Result = ToJson(await someServiceWithExceptions.ThrowStackOverflowExceptionAsync()
+				.OnFault<int, CustomException>(e => -8)
+				.OnFault<int, StackOverflowException>(e => -7)
+				.OnFault<int, Exception>(e => -9));
 		}
 
 		private async Task ThrowCustomExceptionAsync()
 		{
-			Result = ToJson(await someServiceWithExceptions.ThrowCustomExceptionAsync().HandleFault());
+			Result = ToJson(await someServiceWithExceptions.ThrowCustomExceptionAsync()
+				.OnFault<int, CustomException>(e => -8));
 		}
 
 		private async Task ThrowCustomExceptionWithResultAsync()
 		{
-			Result = ToJson(await someServiceWithExceptions.ThrowCustomExceptionWithResultAsync().HandleFault());
-			
+			Result = ToJson(await someServiceWithExceptions.ThrowCustomExceptionWithResultAsync()
+				.OnFault<Result<int>, CustomException>(e => Result<int>.Failure(e)));
 		}
 
 		private string ToJson(object obj)
